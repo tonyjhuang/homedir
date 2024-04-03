@@ -1,0 +1,41 @@
+function sgssh {
+  gcloud compute ssh $1 --zone=$2 --project $3 --command "sudo su - deploy" -- -t -o ProxyCommand="corp-ssh-helper %h %p";
+}
+
+function gssh {
+  gcloud compute ssh $1 --zone=$2 --project $3 --command "sudo su - deploy" -- -t -o ProxyCommand="corp-ssh-helper %h %p";
+}
+
+function nss { gssh s-usc1c-nss-$1 us-central1-c firebase-prod; }
+function snss { sgssh s-usc1c-nss-$1 us-central1-c firebase-staging; }
+function nss-euw { gssh s-apse1b-nss-$1 europe-west1-b firebasedatabase-euw1-prod; }
+function snss-euw { sgssh s-apse1b-snss-$1 europe-west1-b firebasedatabase-euw1-staging; }
+function nss-apse { gssh s-apse1b-nss-$1 asia-southeast1-b firebasedatabase-apse1-prod; }
+function snss-apse { sgssh s-apse1b-snss-$1 asia-southeast1-b firebasedatabase-apse1-staging; }
+
+function chef { gssh s-usc1c-chef-client-$1 us-central1-c firebase-prod; }
+function schef { gssh s-usc1c-schef-client-$1 us-central1-c firebase-staging; }
+function chef-usc { gssh s-usc1c-chef-client-$1 us-central1-c firebasedatabase-usc1-prod; }
+function schef-usc { gssh s-usc1c-schef-client-$1 us-central1-c firebasedatabase-usc1-staging; }
+function chef-euw { gssh s-euw1b-chef-client-$1 europe-west1-b firebasedatabase-euw1-prod; }
+function schef-euw { gssh s-euw1b-schef-client-$1 europe-west1-b firebasedatabase-euw1-staging; }
+function chef-apse { gssh s-apse1b-chef-client-$1 asia-southeast1-b firebasedatabase-apse1-prod; }
+function schef-apse { gssh s-apse1b-schef-client-$1 asia-southeast1-b firebasedatabase-apse1-staging; }
+
+function cluster { gssh s-usc1c-cluster-admin-$1 us-central1-c firebase-prod; }
+function scluster { gssh s-usc1c-scluster-admin-$1 us-central1-c firebase-staging; }
+function cluster-usc { gssh s-usc1c-cluster-admin-$1 us-central1-c firebasedatabase-usc1-prod; }
+function scluster-usc { gssh s-usc1c-scluster-admin-$1 us-central1-c firebasedatabase-usc1-staging; }
+function cluster-euw { gssh s-euw1b-cluster-admin-$1 europe-west1-b firebasedatabase-euw1-prod; }
+function scluster-euw { gssh s-euw1b-scluster-admin-$1 europe-west1-b firebasedatabase-euw1-staging; }
+function cluster-apse { gssh s-apse1b-cluster-admin-$1 asia-southeast1-b firebasedatabase-apse1-prod; }
+function scluster-apse { gssh s-apse1b-scluster-admin-$1 asia-southeast1-b firebasedatabase-apse1-staging; }
+
+function snapworker { gssh s-usc1c-snapworker-$1 us-central1-c firebase-prod; }
+function ssnapworker { gssh s-usc1c-ssnapworker-$1 us-central1-c firebase-staging; }
+function snapworker-usc { gssh s-usc1c-snapworker-$1 us-central1-c firebasedatabase-usc1-prod; }
+function ssnapworker-usc { gssh s-usc1c-ssnapworker-$1 us-central1-c firebasedatabase-usc1-staging; }
+function snapworker-euw { gssh s-euw1b-snapworker-$1 europe-west1-b firebasedatabase-euw1-prod; }
+function ssnapworker-euw { gssh s-euw1b-ssnapworker-$1 europe-west1-b firebasedatabase-euw1-staging; }
+function snapworker-apse { gssh s-apse1b-snapworker-$1 asia-southeast1-b firebasedatabase-apse1-prod; }
+function ssnapworker-apse { gssh s-apse1b-ssnapworker-$1 asia-southeast1-b firebasedatabase-apse1-staging; }
