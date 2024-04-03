@@ -1,0 +1,62 @@
+#!/bin/bash
+
+# Installs a cool, dynamic, Google-colored prompt.
+
+# Colors
+NO_COLOR="\[$(tput sgr0)\]"
+NO_COLOR_DIM="\[$(tput sgr0)$(tput dim)\]"
+RED="\[$(tput dim)$(tput setaf 1)\]"
+GREEN="\[$(tput setaf 2)\]"
+YELLOW="\[$(tput setaf 3)\]"
+BLUE="\[$(tput dim)$(tput setaf 4)\]"
+
+CITC_BASE="/google/src/cloud/$USER"
+
+citc_client() {
+  [[ `pwd` =~ ^$CITC_BASE/([^/]*).* ]] && echo ${BASH_REMATCH[1]}
+}
+citc_separator() {
+  citc_client | sed -e 's/\(.*\)/(\1)/'
+}
+git_branch() {
+  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1) /'
+}
+
+g3pwd() {
+  # Get CitC client name based on current path
+  if [[ $PWD =~ ^"$HOME"(/|$) ]]; then
+    echo "~${PWD#$HOME}"
+  else
+    G3PWD=$PWD
+    CITC_PATH=$CITC_BASE/$(citc_client)
+
+    # Remove CitC client path
+    G3PWD=$(echo -n $G3PWD | sed -e "s:$CITC_PATH::")
+
+    # Collapse /google3/ to //
+    G3PWD=$(echo -n $G3PWD | sed -e "s:^/google3/://:")
+
+    # Abbreviate //j/c/g paths
+    G3PWD=$(echo -n $G3PWD | sed -e "s:^//java/com/google://j/c/g:")
+
+    # Abbreviate //jt/c/g paths
+    G3PWD=$(echo -n $G3PWD | sed -e "s:^//javatests/com/google://jt/c/g:")
+
+    # experimental
+    G3PWD=$(echo -n $G3PWD | sed -e "s:^//experimental/users/tonyjhuang://e/u/t:")
+
+    echo $G3PWD
+  fi
+}
+
+PS1="\
+$(tput dim)\
+${debian_chroot:+($debian_chroot)}\
+$NO_COLOR_DIM\h\
+$NO_COLOR_DIM:\
+$NO_COLOR$YELLOW\$(g3pwd)   \
+$NO_COLOR_DIM[\D{%T}]\
+\\n\
+$GREEN\$(citc_separator)\$(git_branch)\
+$NO_COLOR$ "
+
